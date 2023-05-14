@@ -1,5 +1,3 @@
-{-# LANGUAGE RecordWildCards #-}
-
 module Lib
     ( someFunc
     , answer
@@ -15,21 +13,12 @@ module Lib
 
 import Data.Maybe (fromMaybe)
 import Distance as D (Distance (..), toMillimeters, map, withUnit, marathon, halfMarathon)
+import Pace
 import Time as T
 import Unit (Unit (..))
-import Text.Printf (printf)
 
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
-
-data Pace = Pace
-    { time :: Time
-    , distance :: Distance
-    } deriving (Eq)
-
-instance Show Pace where
-    show Pace {..} = show (minutes time) <> ":" <> printf "%02d" (seconds time) <> " мин/" <> show (unit distance)
-
 
 data Question
     = QPace Pace

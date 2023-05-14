@@ -27,6 +27,7 @@ library
   exposed-modules:
       Distance
       Lib
+      Pace
       Time
       Unit
   other-modules:
