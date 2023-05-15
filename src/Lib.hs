@@ -1,4 +1,4 @@
-module Lib
+    module Lib
     ( someFunc
     , answer
     , fromDistanceAndPace
@@ -14,21 +14,14 @@ module Lib
 import Data.Maybe (fromMaybe)
 import Distance as D (Distance (..), toMillimeters, map, withUnit, marathon, halfMarathon)
 import Pace
+import Types
 import Time as T
 import Unit (Unit (..))
 
 someFunc :: IO ()
 someFunc = putStrLn "someFunc"
 
-data Question
-    = QPace Pace
-    | QDistancePace Distance Pace
-    | QDistanceTime Distance Time (Maybe Unit)
-    | QPaceTime Pace Time (Maybe Unit)
-    deriving (Show)
 
-data Answer = Answer Distance Time Pace
-    deriving (Show)
 
 fromDistanceAndPace :: Distance -> Pace -> Answer
 fromDistanceAndPace distance_ pace_ = Answer distance_ time_ pace_
