@@ -29,6 +29,7 @@ library
       Lib
       Pace
       Parser
+      Parser.Helpers
       Time
       Types
       Unit
