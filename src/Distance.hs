@@ -11,10 +11,12 @@ module Distance
     ) where
 
 import Unit (Unit(..))
+import qualified Unit (parser)
 import Prelude hiding (map)
-import Text.Parsec (Stream, ParsecT, try, (<|>), letter, many1, string)
+import Text.Parsec (Stream, ParsecT, try, (<|>), letter, many1, string, option)
 import Data.Char (toUpper)
 import Data.List (isPrefixOf)
+import Parser.Helpers (spaced, number)
 
 data Distance = Distance
     { amount :: Double
@@ -61,7 +63,13 @@ map :: (Double -> Double) -> Distance -> Distance
 map f d = d { amount = f (amount d) }
 
 parser :: Stream s m Char => ParsecT s st m Distance
-parser = namedDistance
+parser = namedDistance <|> numberWithUnit
+
+numberWithUnit :: Stream s m Char => ParsecT s st m Distance
+numberWithUnit = do
+    d <- spaced $ fromIntegral <$> number 4 9999 
+    u <- option Unit.Kilometer (try (spaced Unit.parser))
+    return $ Distance d u
 
 namedDistance :: Stream s m Char => ParsecT s st m Distance
 namedDistance = try manyWordsHalfMarathon <|> try oneWordDistance
@@ -84,7 +92,7 @@ oneWordDistance = do
         us ->
             if "ДЕСЯТ" `isPrefixOf` us
             then return (Distance 10 Kilometer)
-            else if any (`isPrefixOf` us) ["ПЯТЕРК", "ПЯТЁРК", "ПАРКРАН"]
+            else if any (`isPrefixOf` us) ["ПЯТЕР", "ПЯТЁР", "ПАРКРАН"]
             then return (Distance 5 Kilometer)
             else if any (`isPrefixOf` us) ["МАРАФОН", "MARATHON"]
             then return marathon

@@ -8,7 +8,7 @@ module Pace
 
 import Time (Time, minutes, seconds, paceTimeParser)
 import Distance (Distance(..), unit, amount)
-import qualified Unit (parser, Unit(..))
+import qualified Unit (Unit(..), forPaceParser)
 import Text.Printf (printf)
 import Text.Parsec (Stream, ParsecT, option, try, choice, string)
 import Parser.Helpers (spaced)
@@ -29,7 +29,7 @@ prefixedParser = do
 withUnit :: Stream s m Char => ParsecT s st m Pace
 withUnit = do
     t <- spaced paceTimeParser
-    u <- option Unit.Kilometer (try (spaced Unit.parser))
+    u <- option Unit.Kilometer (try (spaced Unit.forPaceParser))
     return $ Pace t (Distance 1 u)
 
 prefix :: Stream s m Char => ParsecT s st m String
