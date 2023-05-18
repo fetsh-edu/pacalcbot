@@ -6,7 +6,7 @@ module Parser.Helpers
 import Text.Parsec (Stream, ParsecT, digit, optionMaybe, spaces)
 import Data.Char (digitToInt, isDigit)
 
-  
+
 spaced :: Stream s m Char => ParsecT s st m a -> ParsecT s st m a
 spaced someParser = do
     spaces

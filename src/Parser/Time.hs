@@ -1,49 +1,12 @@
-{-# LANGUAGE RecordWildCards #-}
-
-module Time
-    ( Time (..)
-    , toSeconds
-    , fromSeconds
-    , multiply
-    , divide
-    , parser
+module Parser.Time
+    ( parser
     , paceTimeParser
     , prefixedParser
-    , separator
-    , asWords
     ) where
 
+import Calculator.Time
 import Parser.Helpers (number, spaced)
-import Text.Printf (printf)
-import Text.Parsec (Stream, ParsecT, string, choice, notFollowedBy, optionMaybe, oneOf, spaces, (<|>), skipMany, char, try)
-import Control.Monad (void)
-
-
-data Time = Time
-    { hours :: Int
-    , minutes :: Int
-    , seconds :: Int
-    } deriving (Eq)
-    
-
-instance Show Time where
-    show Time {..} = show hours <> ":" <> printf "%02d" minutes <> ":" <> printf "%02d" seconds
-
-
-toSeconds :: Time -> Int
-toSeconds Time {..} = seconds + minutes * 60 + hours * 60 * 60
-
-fromSeconds :: Int -> Time
-fromSeconds secs_ = Time { hours = hours_, minutes = minutes_, seconds = seconds_ }
-    where
-        (hours_, minutes__) = secs_ `divMod` (60 * 60)
-        (minutes_, seconds_) = minutes__ `divMod` 60
-
-multiply :: Double -> Time -> Time
-multiply m t = fromSeconds $ round (m * fromIntegral (toSeconds t))
-
-divide :: Double -> Time -> Time
-divide m t = fromSeconds $ round (fromIntegral (toSeconds t) / m)
+import Text.Parsec (Stream, ParsecT, string, choice, notFollowedBy, optionMaybe, oneOf, (<|>), skipMany, try)
 
 prefix :: Stream s m Char => ParsecT s st m String
 prefix = choice [string "ИЗ", string "ЗА"]

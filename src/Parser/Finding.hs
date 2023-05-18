@@ -1,15 +1,14 @@
-module Parser
-    (parseFindings, findingsParser) where
+module Parser.Finding
+    (parseFindings) where
 
 import Text.Parsec
-import Pace (Pace(..))
-import Time (Time(..))
-import qualified Time (prefixedParser, parser)
-import qualified Distance as D (Distance(..), parser)
-import qualified Pace (withUnit, prefixedParser)
+import Calculator.Pace (Pace)
+import Calculator.Time (Time)
+import qualified Parser.Time as Time (prefixedParser, parser)
+import qualified Calculator.Distance as D (Distance)
+import qualified Parser.Distance as D (parser)
+import qualified Parser.Pace as Pace (parser, prefixedParser)
 import Data.Char (toUpper)
-import Debug.Trace (trace)
-
 
 data Finding = FPace Pace | FTime Time | FDistance D.Distance | FChar Char | EOF
     deriving (Show, Eq)
@@ -21,7 +20,7 @@ findingsParser :: Stream s m Char => ParsecT s u m [RelevantFinding]
 findingsParser = do
     r <- try (FPace <$> Pace.prefixedParser)
             <|> try (FTime <$> Time.prefixedParser)
-            <|> try (FPace <$> Pace.withUnit)
+            <|> try (FPace <$> Pace.parser)
             <|> try (FTime <$> Time.parser)
             <|> try (FDistance <$> D.parser)
             <|> (FChar <$> anyChar)

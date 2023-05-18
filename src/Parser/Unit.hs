@@ -1,21 +1,11 @@
-module Unit
-    (Unit(..)
-    , parser
+module Parser.Unit
+    ( parser
     , forPaceParser
     ) where
 
 import Data.Char (toUpper)
 import Text.Parsec (letter, many1, ParsecT, Stream)
-
-
-data Unit = Meter | Kilometer | Mile
-    deriving (Eq)
-
-instance Show Unit where
-    show Meter = "м"
-    show Kilometer = "км"
-    show Mile = "mi"
-
+import Calculator.Unit (Unit(..))
 
 forPaceParser :: Stream s m Char => ParsecT s st m Unit
 forPaceParser = do
@@ -23,10 +13,12 @@ forPaceParser = do
   case fmap toUpper s of
     "КМ" -> return Kilometer
     "KM" -> return Kilometer
-    "КИЛОМЕТР" -> return Kilometer
+    "КИЛОМЕТРОВ" -> return Kilometer
     "КИЛОМЕТРЫ" -> return Kilometer
+    "КИЛОМЕТР" -> return Kilometer
     "МИЛЯ" -> return Mile
     "МИЛИ" -> return Mile
+    "МИЛЬ" -> return Mile
     "MILE" -> return Mile
     "MI" -> return Mile
     "М" -> return Mile
@@ -41,9 +33,11 @@ parser = do
   case fmap toUpper s of
     "КМ" -> return Kilometer
     "KM" -> return Kilometer
-    "КИЛОМЕТР" -> return Kilometer
+    "КИЛОМЕТРОВ" -> return Kilometer
     "КИЛОМЕТРЫ" -> return Kilometer
+    "КИЛОМЕТР" -> return Kilometer
     "МИЛЯ" -> return Mile
+    "МИЛЬ" -> return Mile
     "МИЛИ" -> return Mile
     "MILE" -> return Mile
     "MI" -> return Mile

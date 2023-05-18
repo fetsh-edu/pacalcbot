@@ -25,14 +25,19 @@ source-repository head
 
 library
   exposed-modules:
-      Distance
+      Calculator.Calculator
+      Calculator.Distance
+      Calculator.Pace
+      Calculator.Time
+      Calculator.Types
+      Calculator.Unit
       Lib
-      Pace
-      Parser
+      Parser.Distance
+      Parser.Finding
       Parser.Helpers
-      Time
-      Types
-      Unit
+      Parser.Pace
+      Parser.Time
+      Parser.Unit
   other-modules:
       Paths_pacalcbot
   hs-source-dirs:
