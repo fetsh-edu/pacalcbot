@@ -4,9 +4,9 @@ module Parser
 import Text.Parsec
 import Pace (Pace(..))
 import Time (Time(..))
-import qualified Time (prefixedParser, simpleParser)
+import qualified Time (prefixedParser, parser)
 import qualified Distance as D (Distance(..), parser)
-import qualified Pace (simpleParser, prefixedParser)
+import qualified Pace (withUnit, prefixedParser)
 import Data.Char (toUpper)
 import Debug.Trace (trace)
 
@@ -21,8 +21,8 @@ findingsParser :: Stream s m Char => ParsecT s u m [RelevantFinding]
 findingsParser = do
     r <- try (FPace <$> Pace.prefixedParser)
             <|> try (FTime <$> Time.prefixedParser)
-            <|> try (FPace <$> Pace.simpleParser)
-            <|> try (FTime <$> Time.simpleParser)
+            <|> try (FPace <$> Pace.withUnit)
+            <|> try (FTime <$> Time.parser)
             <|> try (FDistance <$> D.parser)
             <|> (FChar <$> anyChar)
             <|> (EOF <$ eof)
