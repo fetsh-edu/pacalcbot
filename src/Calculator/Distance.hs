@@ -5,6 +5,8 @@ module Calculator.Distance
     , marathon
     , halfMarathon
     , toMillimeters
+    , tenK
+    , fiveK
     , withUnit
     , map
     ) where
@@ -31,6 +33,12 @@ marathon = Distance 42.195 Kilometer
 
 halfMarathon :: Distance
 halfMarathon = Distance 21.0975 Kilometer
+
+tenK :: Distance
+tenK = Distance 10 Kilometer
+
+fiveK :: Distance
+fiveK = Distance 5 Kilometer
 
 toMillimeters :: Distance -> Double
 toMillimeters Distance {..} =

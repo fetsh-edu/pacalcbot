@@ -1,12 +1,16 @@
 module Calculator.Types
     ( Question (..)
     , Answer (..)
+    , Unit (..)
+    , Time (..)
+    , Pace (..)
+    , Distance (..)
     ) where
 
-import Calculator.Unit (Unit)
-import Calculator.Time (Time)
-import Calculator.Distance (Distance)
-import Calculator.Pace (Pace)
+import Calculator.Unit (Unit(..))
+import Calculator.Time (Time(..))
+import Calculator.Distance (Distance(..))
+import Calculator.Pace (Pace(..))
     
 data Question
   = QPace Pace

@@ -3,11 +3,9 @@ module Calculator.Calculator
 
 
 import Data.Maybe (fromMaybe)
-import Calculator.Distance as D (Distance (..), toMillimeters, map, withUnit, marathon, halfMarathon)
-import Calculator.Pace
+import Calculator.Distance as D (toMillimeters, map, withUnit, marathon, halfMarathon, fiveK, tenK)
 import Calculator.Types
-import Calculator.Time as T
-import Calculator.Unit (Unit (..))
+import Calculator.Time (multiply, divide, toSeconds)
 
 fromDistanceAndPace :: Distance -> Pace -> Answer
 fromDistanceAndPace distance_ pace_ = Answer distance_ time_ pace_
@@ -32,7 +30,7 @@ fromPaceAndTime pace_ time_ unit_ = Answer distance_ time_ pace_
 
 
 answer :: Question -> [Answer]
-answer (QPace pace_) = flip fromDistanceAndPace pace_ <$> [marathon, halfMarathon]
+answer (QPace pace_) = flip fromDistanceAndPace pace_ <$> [marathon, halfMarathon, tenK, fiveK]
 answer (QDistancePace distance_ pace_) = [fromDistanceAndPace distance_ pace_]
 answer (QDistanceTime distance_ time_ unit_) = [fromDistanceAndTime distance_ time_ unit_]
 answer (QPaceTime pace_ time_ unit_) = [fromPaceAndTime pace_ time_ unit_]

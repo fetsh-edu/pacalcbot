@@ -1,7 +1,11 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 module Parser.Time
     ( parser
     , paceTimeParser
     , prefixedParser
+    , asWords
+    , asNumbers
     ) where
 
 import Calculator.Time
@@ -14,7 +18,7 @@ prefix = choice [string "ИЗ", string "ЗА"]
 prefixedParser :: Stream s m Char => ParsecT s st m Time
 prefixedParser = do
     _ <- spaced prefix
-    asNumbers
+    try parser <|>  try minutesAsOneNumber
 
 parser :: Stream s m Char => ParsecT s st m Time
 parser = asNumbers <|> asWords
@@ -27,21 +31,26 @@ paceTimeAsNumber = do
     m <- number 2 59
     _ <- separator
     s <- number 2 59
-    notFollowedBy $ oneOf [':', '.']
+    notFollowedBy strictSeparator
     return (Time 0 m s )
 
 paceTimeAsWords :: Stream s m Char => ParsecT s st m Time
 paceTimeAsWords = do
     m <- minutesWord
     spaced minutesSeparator
-    Time 0 m <$> fiveToSixtyWords
+    s <- optionMaybe fiveToSixtyWords
+    case s of
+        Nothing -> return $ Time 0 m 0
+        Just s_ -> return $ Time 0 m s_
 
 asWords :: Stream s m Char => ParsecT s st m Time
 asWords = do
     h <- hoursWord
     spaced hoursSeparator
-    m <- fiveToSixtyWords
-    return $ Time h m 0
+    m <- optionMaybe fiveToSixtyWords
+    case m of
+        Nothing -> return $ Time h 0 0
+        Just m_ -> return $ Time h m_ 0
 
 hoursWord :: Stream s m Char => ParsecT s st m Int
 hoursWord
@@ -116,15 +125,24 @@ asNumbers = do
   h <- number 2 23
   _ <- separator
   m <- number 2 59
-  x <- optionMaybe separator
+  x <- optionMaybe strictSeparator
   case x of
     Nothing -> return $ Time h m 0
     Just _ -> do
-      s <- number 2 59
+      s <- try (number 2 59)
       return $ Time h m s
+
+minutesAsOneNumber :: Stream s m Char => ParsecT s st m Time
+minutesAsOneNumber = do
+    (\x -> Time 0 x 0) <$> spaced (number 2 99)
+    
+
 
 separator :: Stream s m Char => ParsecT s st m Char
 separator = oneOf [':', '.', ' ']
+
+strictSeparator :: Stream s m Char => ParsecT s st m Char
+strictSeparator = oneOf [':', '.']
 
 hoursSeparator :: Stream s m Char => ParsecT s st m ()
 hoursSeparator = skipMany $ try (string "ЧАСОВ") <|> try (string "ЧАСА") <|> try (string "ЧАС") <|> try (string "С ")
