@@ -1,6 +1,11 @@
 module Main (main) where
 
-import Lib
+import Lib ( run, runDefault )
+import System.Environment (getArgs)
 
 main :: IO ()
-main = someFunc "если бежать half половинушку 3 30 mi из 2 16 по три пятнадцать mi 10к ну или марафонец из трех с чем-то"
+main = do
+    args <- getArgs
+    case args of
+       [a] -> run a
+       _ -> runDefault

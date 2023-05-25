@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleContexts #-}
 module Parser.Unit
     ( parser
     , forPaceParser
