@@ -26,6 +26,10 @@ dependencies:
 - filepath
 - directory
 - yaml
+- telegram-bot-api >= 6.7
+- telegram-bot-simple >= 0.12
+- warp
+- warp-tls
 
 ghc-options:
 - -Wall

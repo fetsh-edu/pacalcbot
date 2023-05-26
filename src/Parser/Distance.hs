@@ -1,7 +1,8 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 module Parser.Distance
     (parser) where
 
-  
 import qualified Parser.Unit as Unit (parser)
 import Calculator.Distance
 import Calculator.Unit as Unit (Unit(..))

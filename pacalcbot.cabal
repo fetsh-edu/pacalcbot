@@ -25,6 +25,7 @@ source-repository head
 
 library
   exposed-modules:
+      Bot.Bot
       Calculator.Calculator
       Calculator.Distance
       Calculator.Pace
@@ -49,7 +50,11 @@ library
     , directory
     , filepath
     , parsec
+    , telegram-bot-api >=6.7
+    , telegram-bot-simple >=0.12
     , text
+    , warp
+    , warp-tls
     , yaml
   default-language: Haskell2010
 
@@ -66,7 +71,11 @@ executable pacalcbot-exe
     , filepath
     , pacalcbot
     , parsec
+    , telegram-bot-api >=6.7
+    , telegram-bot-simple >=0.12
     , text
+    , warp
+    , warp-tls
     , yaml
   default-language: Haskell2010
 
@@ -84,6 +93,10 @@ test-suite pacalcbot-test
     , filepath
     , pacalcbot
     , parsec
+    , telegram-bot-api >=6.7
+    , telegram-bot-simple >=0.12
     , text
+    , warp
+    , warp-tls
     , yaml
   default-language: Haskell2010

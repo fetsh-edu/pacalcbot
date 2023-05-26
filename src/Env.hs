@@ -3,7 +3,7 @@
 module Env
   ( getConfig
   , getConfigByPath
-  , Config
+  , Config (..)
   ) where
 
 import System.FilePath ((</>))
@@ -24,7 +24,7 @@ instance FromJSON Config where
 
 configPath :: IO FilePath
 configPath = fmap (</> "secrets.yaml") (getXdgDirectory XdgConfig "pacalcbot")
- 
+
 getConfig :: IO (Either ParseException Config)
 getConfig = do
   decodeFileEither =<< configPath

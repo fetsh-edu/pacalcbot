@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 module Parser.Finding
     ( Finding(..)
     , parseFindings ) where
