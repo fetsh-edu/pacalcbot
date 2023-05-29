@@ -21,9 +21,9 @@ data Distance = Distance
 
 instance Show Distance where
     show Distance {..}
-        | amount `almostEq`  42.195 = "Марафон (42.195 км)"
-        | amount `almostEq` 21.0975 = "Полумарафон (21.0975 км)"
-        | otherwise = show amount <> ": " <> show unit
+        | amount `almostEq`  42.195 = "Марафон"
+        | amount `almostEq` 21.0975 = "Полумарафон"
+        | otherwise = show amount <> " " <> show unit
 
 almostEq :: (Ord a, Fractional a) => a -> a -> Bool
 almostEq a b = abs (a - b) <= 0.0002

@@ -42,7 +42,8 @@ packages:
 #
 extra-deps:
   - telegram-bot-simple-0.12 # @sha256:6e0d268458ead1a1da8d651fca1f74a7d640d57e6506496491cdc35d43003528,5585
-  - telegram-bot-api-6.7 # @sha256:6e0d268458ead1a1da8d651fca1f74a7d640d57e6506496491cdc35d43003528,5585
+  - archive: /home/eliyahu/eliyahu-apps/telegram-bot-simple/telegram-bot-api/.stack-work/dist/x86_64-linux-tinfo6/Cabal-3.4.0.0/telegram-bot-api-6.7.1.tar.gz
+#  - telegram-bot-api-6.5.1 # @sha256:6e0d268458ead1a1da8d651fca1f74a7d640d57e6506496491cdc35d43003528,5585
 
 # Override default flag values for local packages and extra-deps
 # flags: {}

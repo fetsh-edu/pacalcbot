@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 module Bot.Bot
   ( runWebHook
   , runPolling
@@ -14,23 +15,25 @@ import Network.Wai.Handler.Warp
 import Network.Wai.Handler.WarpTLS
   ( OnInsecure (AllowInsecure),
     TLSSettings (onInsecure),
-    defaultTlsSettings,
-    tlsSettings,
+    defaultTlsSettings
   )
 import Telegram.Bot.API
 import Telegram.Bot.API.InlineMode.InlineQueryResult
-import Telegram.Bot.API.InlineMode.InputMessageContent (defaultInputTextMessageContent)
+import Telegram.Bot.API.InlineMode.InputMessageContent (InputMessageContent(..))
 import Telegram.Bot.Simple
-import Telegram.Bot.Simple.UpdateParser
-  ( updateMessageSticker,
-    updateMessageText,
-  )
+import Telegram.Bot.Simple.UpdateParser ( updateMessageText)
 import Calculator.Types
 import Data.List (nub)
 import Calculator.Calculator (answer)
 import Parser.Finding (Finding(..), parseFindings)
 import Control.Monad ((>=>))
 import Text.Parsec (ParseError)
+import Telegram.Bot.Simple.Debug (traceBotActionsShow, traceTelegramUpdatesWith)
+import qualified Data.Aeson as Aeson (encode)
+import Data.Aeson (ToJSON)
+import qualified Data.Text.Lazy             as LText
+import qualified Data.Text.Lazy.Encoding    as Text
+import Data.Either (fromRight)
 
 
 type Model = ()
@@ -38,6 +41,7 @@ type Model = ()
 data Action
   = InlineIncoming InlineQueryId Text
   | Incoming Text
+  deriving (Show)
 
 pacalcBot :: BotApp Model Action
 pacalcBot =
@@ -63,19 +67,14 @@ handleAction :: Action -> Model -> Eff Action Model
 handleAction action model = case action of
   InlineIncoming queryId msg ->
     model <# do
-      let result =
-            (defInlineQueryResultGeneric (InlineQueryResultId msg))
-              { inlineQueryResultTitle = Just msg,
-                inlineQueryResultInputMessageContent = Just (defaultInputTextMessageContent msg)
-              }
-          thumbnail = defInlineQueryResultGenericThumbnail result
-          article = defInlineQueryResultArticle thumbnail
-          answerInlineQueryRequest = defAnswerInlineQuery queryId [article]
-      _ <- runTG answerInlineQueryRequest
-      return ()
+        let 
+            results = either (const []) (fmap (answerToArticle msg)) $ buildAnswers (unpack msg)
+            answerInlineQueryRequest = defAnswerInlineQuery queryId results
+        _ <- runTG answerInlineQueryRequest
+        return ()
   Incoming msg ->
     model <# do
-      replyText (pack $ show $ someFunc $ unpack msg)
+      replyText (fromRight "Не получилось понять вопрос" $ showAnswers <$> buildAnswers (unpack msg))
 
 runWebHook :: Text -> Port -> String -> IO ()
 runWebHook token port ip = do
@@ -90,7 +89,7 @@ runWebHook token port ip = do
     requestData =
       (defSetWebhook url)
         { setWebhookCertificate = Nothing,
-          setWebhookAllowedUpdates = Just ["message"]
+          setWebhookAllowedUpdates = Just ["message", "edited_message", "inline_query"]
         }
     config =
       WebhookConfig
@@ -102,11 +101,39 @@ runWebHook token port ip = do
 runPolling :: Text -> IO ()
 runPolling token = do
   env <- defaultTelegramClientEnv (Token token)
-  startBot_ pacalcBot env
+  let conversationBot_ = (traceTelegramUpdatesUglyJSON . traceBotActionsShow) pacalcBot
+  startBot_ conversationBot_ env
 
+upAsJSON :: ToJSON a => a -> String
+upAsJSON = LText.unpack . Text.decodeUtf8 . Aeson.encode
 
-someFunc :: String -> Either ParseError [Answer]
-someFunc line  = (findingsToQuestions >=> answer) <$> parseFindings line
+traceTelegramUpdatesUglyJSON :: BotApp model action -> BotApp model action
+traceTelegramUpdatesUglyJSON = traceTelegramUpdatesWith upAsJSON
+
+buildAnswers :: String -> Either ParseError [Answer]
+buildAnswers line  = (findingsToQuestions >=> answer) <$> parseFindings line
+
+showAnswers :: [Answer] -> Text
+showAnswers [] = "Не получилось найти ответ"
+showAnswers xs = Text.intercalate "\n" $ fmap showAnswer xs
+
+showAnswer :: Answer -> Text
+showAnswer (Answer dist time pace) = pack $ show dist <> " [" <> show pace <> "]: " <> show time
+
+answerToArticle :: Text -> Answer -> InlineQueryResult
+answerToArticle msg answer_ = defInlineQueryResultArticle thumbnail
+    where
+        answerText = showAnswer answer_
+        thumbnail = (defInlineQueryResultGenericThumbnail result)
+                      { inlineQueryResultGenericThumbnailWidth = Just 100
+                      , inlineQueryResultGenericThumbnailHeight = Just 100
+                      , inlineQueryResultGenericThumbnailUrl = Just "https://fetsh.me/img/pace.png"
+                      }
+        result = (defInlineQueryResultGeneric (InlineQueryResultId (head $ Text.splitOn "]" answerText )))
+                  { inlineQueryResultTitle = Just msg
+                  , inlineQueryResultDescription = Just answerText
+                  , inlineQueryResultInputMessageContent = Just (InputTextMessageContent (msg <> " (<b>" <> answerText <> "</b>)") (Just "HTML") (Just True) )
+                  }
 
 findingsToQuestions :: [Finding] -> [Question]
 findingsToQuestions findings

@@ -12,12 +12,16 @@ packages:
   original:
     hackage: telegram-bot-simple-0.12
 - completed:
-    hackage: telegram-bot-api-6.7@sha256:93542d6ad1d677bce6fbdabeb92c42730c745f4df68c8804824b3d53689e78e1,9382
+    filepath: /home/eliyahu/eliyahu-apps/telegram-bot-simple/telegram-bot-api/.stack-work/dist/x86_64-linux-tinfo6/Cabal-3.4.0.0/telegram-bot-api-6.7.1.tar.gz
+    name: telegram-bot-api
     pantry-tree:
-      sha256: 057b1298e8c4158404ab9245c13b6551317c2253838fd68dea879345a5e37fbc
+      sha256: 4b9d54900c07e913da4e66331c881c7819ba4d6096dba2c0eb6ce17bb794b240
       size: 15189
+    sha256: 8d5bbad15ac0fbc621254565623bf832d895006af2a5f2ff0d33d0b18ec86280
+    size: 81687
+    version: 6.7.1
   original:
-    hackage: telegram-bot-api-6.7
+    filepath: /home/eliyahu/eliyahu-apps/telegram-bot-simple/telegram-bot-api/.stack-work/dist/x86_64-linux-tinfo6/Cabal-3.4.0.0/telegram-bot-api-6.7.1.tar.gz
 snapshots:
 - completed:
     sha256: 126fa33ceb11f5e85ceb4e86d434756bd9a8439e2e5776d306a15fbc63b01e89

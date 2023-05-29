@@ -26,10 +26,11 @@ dependencies:
 - filepath
 - directory
 - yaml
-- telegram-bot-api >= 6.7
 - telegram-bot-simple >= 0.12
+- telegram-bot-api >= 6.7.1
 - warp
 - warp-tls
+- aeson
 
 ghc-options:
 - -Wall
