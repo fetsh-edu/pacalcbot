@@ -10,15 +10,15 @@
 #
 # resolver: lts-3.5
 # resolver: nightly-2015-09-21
-# resolver: ghc-7.10.2
+resolver: nightly-2023-05-31
 #
 # The location of a snapshot can be provided as a file or url. Stack assumes
 # a snapshot provided as a file might change, whereas a url resource does not.
 #
 # resolver: ./custom-snapshot.yaml
 # resolver: https://example.com/snapshots/2018-01-01.yaml
-resolver:
-  url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/20/20.yaml
+#resolver:
+#  url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/20/20.yaml
 
 # User packages to be built.
 # Various formats can be used as shown in the example below.
@@ -42,7 +42,7 @@ packages:
 #
 extra-deps:
   - telegram-bot-simple-0.12 # @sha256:6e0d268458ead1a1da8d651fca1f74a7d640d57e6506496491cdc35d43003528,5585
-  - archive: /home/eliyahu/eliyahu-apps/telegram-bot-simple/telegram-bot-api/.stack-work/dist/x86_64-linux-tinfo6/Cabal-3.4.0.0/telegram-bot-api-6.7.1.tar.gz
+  - archive: telegram-bot-api-6.7.1.tar.gz
 #  - telegram-bot-api-6.5.1 # @sha256:6e0d268458ead1a1da8d651fca1f74a7d640d57e6506496491cdc35d43003528,5585
 
 # Override default flag values for local packages and extra-deps
@@ -52,7 +52,7 @@ extra-deps:
 # extra-package-dbs: []
 
 # Control whether we use the GHC we find on the path
-# system-ghc: true
+system-ghc: true
 #
 # Require a specific version of Stack, using version ranges
 # require-stack-version: -any # Default

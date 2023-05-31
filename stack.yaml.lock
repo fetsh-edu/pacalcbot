@@ -12,7 +12,7 @@ packages:
   original:
     hackage: telegram-bot-simple-0.12
 - completed:
-    filepath: /home/eliyahu/eliyahu-apps/telegram-bot-simple/telegram-bot-api/.stack-work/dist/x86_64-linux-tinfo6/Cabal-3.4.0.0/telegram-bot-api-6.7.1.tar.gz
+    filepath: telegram-bot-api-6.7.1.tar.gz
     name: telegram-bot-api
     pantry-tree:
       sha256: 4b9d54900c07e913da4e66331c881c7819ba4d6096dba2c0eb6ce17bb794b240
@@ -21,11 +21,10 @@ packages:
     size: 81687
     version: 6.7.1
   original:
-    filepath: /home/eliyahu/eliyahu-apps/telegram-bot-simple/telegram-bot-api/.stack-work/dist/x86_64-linux-tinfo6/Cabal-3.4.0.0/telegram-bot-api-6.7.1.tar.gz
+    filepath: telegram-bot-api-6.7.1.tar.gz
 snapshots:
 - completed:
-    sha256: 126fa33ceb11f5e85ceb4e86d434756bd9a8439e2e5776d306a15fbc63b01e89
-    size: 650041
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/20/20.yaml
-  original:
-    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/20/20.yaml
+    sha256: cfd4536710fbd0ee992ba694f7229bb2a3e3d9f7e084c2524faed472c4bdbee3
+    size: 632121
+    url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/nightly/2023/5/31.yaml
+  original: nightly-2023-05-31
