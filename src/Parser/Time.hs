@@ -21,7 +21,7 @@ prefixedParser = do
     try parser <|>  try minutesAsOneNumber
 
 parser :: Stream s m Char => ParsecT s st m Time
-parser = asNumbers <|> asWords
+parser = spaced (asNumbers <|> asWords)
 
 paceTimeParser :: Stream s m Char => ParsecT s st m Time
 paceTimeParser = paceTimeAsNumber <|> paceTimeAsWords
