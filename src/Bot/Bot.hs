@@ -111,7 +111,7 @@ traceTelegramUpdatesUglyJSON :: BotApp model action -> BotApp model action
 traceTelegramUpdatesUglyJSON = traceTelegramUpdatesWith upAsJSON
 
 buildAnswers :: String -> Either ParseError [Answer]
-buildAnswers line  = (findingsToQuestions >=> answer) <$> parseFindings line
+buildAnswers line  = nub . (findingsToQuestions >=> answer) <$> parseFindings line
 
 showAnswers :: [Answer] -> Text
 showAnswers [] = "Не получилось найти ответ"

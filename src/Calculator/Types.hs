@@ -20,5 +20,4 @@ data Question
   deriving (Show)
 
 data Answer = Answer Distance Time Pace
-  deriving (Show)
-
+  deriving (Show, Eq)
